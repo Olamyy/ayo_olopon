@@ -33,7 +33,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    description="A simple rendition of the ayo game in python.\",
+    description="A simple rendition of the ayo game in python.",
     entry_points={
         'console_scripts': [
             'ayo=ayo.cli:main',
