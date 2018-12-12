@@ -57,7 +57,7 @@ class Board(object):
                 index += 1
             except IndexError:
                 # Proceed to next area
-                current_area = self.get_next_area(current_area, current_store)
+                current_area = self.get_next_area(current_area)
                 # Reset index and increment stone at current position
                 index = 0
                 self.board[current_area][index] += 1
@@ -70,7 +70,7 @@ class Board(object):
 
         return self.board, free_move
 
-    def get_next_area(self, current_area, current_store):
+    def get_next_area(self, current_area):
         """ Given a current area of transaction, gives the next area. """
         if current_area == BoardConfig.PLAYER_ONE_PITS:
             return BoardConfig.PLAYER_ONE_STORE
