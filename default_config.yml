@@ -1,0 +1,10 @@
+config:
+    pim: 1
+    game: hvc
+    pits: 6
+    stones: 4
+    players:
+        player1:
+            name: Olamilekan
+        player2:
+            name: Wahab

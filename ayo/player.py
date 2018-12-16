@@ -1,12 +1,13 @@
-from ayo.settings import BoardConfig
+from settings import BoardConfig
+from board import Board
+import random
 
 
 class Player(object):
     """ A game player """
 
-    def __init__(self, name, pits, store,  board=None, points=0):
+    def __init__(self, name, pits, store, points=0):
         self.name = name
-        self.board = board
         self.id = self.generate_id()
         self.points = points
         self.pits = pits
@@ -14,23 +15,79 @@ class Player(object):
 
     def generate_id(self):
         import uuid
-        return str(uuid.uuid4()).replace('-', '')
+        id_ = str(uuid.uuid4()).replace('-', '')
+        return id_
 
 
 class Human(Player):
-    def __init__(self, name, pits, store,  board=None, points=0):
-        super(Human, self).__init__(name, board, points)
-
-    def play(self):
+    def play(self, **kwargs):
         """ Get a human player's next move """
         value = input("Please input your next move (1 to {}): ".format(BoardConfig.MAX_PITS))
         return int(value) - 1
 
 
 class Computer(Player):
-    def __init__(self, name, pits, store,  board=None, points=0):
-        super(Computer, self).__init__(name, board, points)
 
-    def pits(self):
+    def get_pits(self, board):
         """ Shortcut to AI pits. """
+        return board[self.pits]
 
+    def eligible_moves(self, board):
+        """ Returns a list of integers representing eligible moves. """
+        eligible_moves = []
+        for i in range(len(self.get_pits(board))):
+            if not self.get_pits(board)[i] == 0:
+                eligible_moves.append(i)
+        return eligible_moves
+
+    def eligible_free_turns(self, board):
+        """ Returns a list of indexes representing eligible free turns. """
+
+        free_turn_indices = list(reversed(range(1, 7)))
+        elig_free_turns = []
+
+        for i in range(0, 6):
+            if self.get_pits(board)[i] == free_turn_indices[i]:
+                elig_free_turns.append(1)
+            else:
+                elig_free_turns.append(0)
+
+        return elig_free_turns
+
+    def think(self, player):
+        """ Slight delay for thinking. """
+        import time
+        from termcolor import colored
+        print(colored('{} is thinking...', 'green').format(player))
+        time.sleep(3)
+
+
+class RandomPlayer(Computer):
+    def play(self, board=None, name=None):
+        # self.think(self.name)  @Todo : Fix
+        self.think(name)
+        return random.choice(self.eligible_moves(board))
+
+
+class MiniMaxPlayer(Computer):
+    def play(self, **kwargs):
+        pass
+
+
+class VectorPlayer(Computer):
+    def play(self, **kwargs):
+        board = kwargs.get('board').board
+        """ Use an reverse indices vector to optimize for free turns. """
+        self.think(self.name)
+
+        reverse_indices = list(reversed(range(0, 6)))
+        reverse_indices.reverse()
+
+        for i in reverse_indices:
+            if self.eligible_free_turns(board)[i] == 1:
+                if self.get_pits(board)[i] == Board.reverse_index(i) + 1:
+                    return i
+        for i in reverse_indices:
+            if self.get_pits(board)[i] > Board.reverse_index(i) + 1:
+                return i
+        return random.choice(self.eligible_moves(board))

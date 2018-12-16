@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from ayo.settings import BoardConfig
-from ayo.exceptions import InvalidBoardAreaError, InvalidMoveError
+from settings import BoardConfig
+from exceptions import InvalidBoardAreaError, InvalidMoveError
 from termcolor import colored
 import sys
 
@@ -34,15 +34,14 @@ class Board(object):
 
     def move_stones(self, player, position):
         current_area = player.pits
-        current_store = player.store
         if not self.board[current_area][position]:
             if self.rules.get("pim"):
                 player.points -= 1
                 print(colored('That move is not allowed. Penalizing {0}. Current point {1}'.format(player.name, player.points), 'red'))
                 print('Exiting Game')
                 sys.exit(1)
-            print(colored('Invalid Move. That move is not allowed {1}'.format(player.name, player.points), 'red'))
-            print('Exiting Game')
+            print(colored('Invalid Move. There are no stones to pick in this pit.', 'red'))
+            return self.board, False, True
 
         stones_grabbed = self.board[current_area][position]
         self.board[current_area][position] = 0
@@ -51,24 +50,19 @@ class Board(object):
 
         for stones in range(stones_grabbed):
             try:
-                # Try to place in adjacent pit prior to incrementing index.
                 self.board[current_area][index + 1] += 1
-                # Stone successfully placed, so increase index.
                 index += 1
             except IndexError:
-                # Proceed to next area
                 current_area = self.get_next_area(current_area)
-                # Reset index and increment stone at current position
                 index = 0
                 self.board[current_area][index] += 1
 
-        free_move = self.earned_free_move(player, current_store)
+        free_move = self.earned_free_move(player, current_area)
 
-        # If last move earned a capture, process it.
         if self.earned_capture(player, current_area, index):
-            self.board = self.process_capture(current_area, index)
+            self.board = self.process_capture(player, current_area, index)
 
-        return self.board, free_move
+        return self.board, free_move, False
 
     def get_next_area(self, current_area):
         """ Given a current area of transaction, gives the next area. """
@@ -76,7 +70,7 @@ class Board(object):
             return BoardConfig.PLAYER_ONE_STORE
         elif current_area == BoardConfig.PLAYER_ONE_STORE:
             return BoardConfig.PLAYER_TWO_PITS
-        elif current_area == BoardConfig.PLAYER_TWO_STORE:
+        elif current_area == BoardConfig.PLAYER_TWO_PITS:
             return BoardConfig.PLAYER_TWO_STORE
         elif current_area == BoardConfig.PLAYER_TWO_STORE:
             return BoardConfig.PLAYER_TWO_PITS
@@ -85,7 +79,7 @@ class Board(object):
 
     def earned_free_move(self, player, last_area):
         if last_area == player.store:
-            print("Earned free move!")
+            print(colored("{} earned a free move!", "yellow").format(player.name))
             return True
         return False
 
@@ -100,13 +94,29 @@ class Board(object):
         else:
             return True
 
+    def process_capture(self, player, area, index):
+        """ Processes capture by moving stones to the player's store. """
+        if player.pits == BoardConfig.PLAYER_ONE_PITS:
+            destination_store = BoardConfig.PLAYER_ONE_STORE
+        else:
+            destination_store = BoardConfig.PLAYER_TWO_STORE
 
+        opposing_area, opposing_index = self.get_opposing_area_and_index(player, area, index)
+        captured_stones = self.board[opposing_area][opposing_index]
+        print('{} stones captured.'.format(captured_stones))
 
-    def process_capture(self, current_area, index):
-        pass
+        # Clear the two pits
+        self.board[area][index] = 0
+        self.board[opposing_area][opposing_index] = 0
 
-    @staticmethod
-    def reverse_index(index):
+        # Move captures and original stone to store
+        total_gain = captured_stones + 1
+        self.board[destination_store][0] += total_gain
+
+        return self.board
+
+    @classmethod
+    def reverse_index(cls, index):
         """ Returns the mirror index to the one given. """
         rev_index = range(0, 6)
         rev_index = list(reversed(rev_index))
@@ -127,4 +137,16 @@ class Board(object):
         opposing_index = self.reverse_index(index)
 
         return opposing_area, opposing_index
+
+    def gather_remaining(self, player):
+        remaining_area = player.pits
+        destination_store = player.store
+        remaining_stones = 0
+        for i in range(6):
+            remaining_stones += self.board[remaining_area][i]
+            self.board[remaining_area][i] = 0
+
+        self.board[destination_store][0] += remaining_stones
+
+        return self.board
 

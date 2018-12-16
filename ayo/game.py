@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+import sys
 
-from ayo.board import Board
-from ayo.player import Human
-from ayo.exceptions import InvalidMoveError
-
+from board import Board
+from player import Human
+from utils import save_to_file
+import datetime
 from termcolor import colored
 
 
@@ -20,25 +21,63 @@ class Game(object):
         self.board = Board(**rules)
         self.player_one, self.player_two = players[0], players[1]
         self.starting_player = self.player_one if rules.get('start') == 1 else self.player_two
+        self.data_map = {self.player_one.id: {'moves': [], 'earned_free_move': [], 'won': [], 'invalid': []}, self.player_two.id: {'moves': [], 'earned_free_move': [], 'won': [], 'invalid': []},
 
-    def move(self):
+                         'date': datetime.datetime.now()}
+        self.rules = rules
+
+    def move(self, player):
         """
         Show board and move
         :return:
         """
+
+        current_player = player
+
         self.board.show_board()
-        current_player = self.starting_player
 
-        next_move = self.starting_player.play()
-        try:
-            self.board.board, free_move_earned = self.board.move_stones(current_player, next_move)
-        except InvalidMoveError:
-            if self._check_for_winner():
-                import sys
+        next_move = current_player.play(board=self.board, name=current_player.name)
+
+        self.data_map[current_player.id]['moves'].append(next_move + 1)
+        self.board.board, free_move_earned, invalid_move = self.board.move_stones(current_player, next_move)
+        if invalid_move:
+            self.data_map[current_player.id]['invalid'].append(1)
+            if self.check_for_winner(current_player=current_player):
+                self.data_map[current_player.id]['won'].append(1)
+                save_to_file(self.data_map)
                 sys.exit()
-            if current_player.__class__ == Human:
-                print(colored('Please select a move with stones you can move.', 'red'))
-            self.move()
+            else:
+                self.data_map[current_player.id]['won'].append(0)
+                if current_player.__class__ == Human:
+                    print(colored('Please select a move with stones you can move.', 'red'))
+                self.move(current_player)
+                save_to_file(self.data_map)
+                if self.rules.get('pim'):
+                    sys.exit()
+        self.data_map[current_player.id]['invalid'].append(0)
+        if self.check_for_winner(current_player=current_player):
+            self.data_map[current_player.id]['won'].append(1)
+            sys.exit()
+        self.data_map[current_player.id]['won'].append(0)
+        if free_move_earned:
+            self.data_map[current_player.id]['earned_free_move'].append(free_move_earned)
+            save_to_file(self.data_map)
+            self.move(current_player)
+        else:
+            current_player = self.swap_current_player(current_player)
+            save_to_file(self.data_map)
+            self.move(current_player)
 
-    def _check_for_winner(self):
-        pass
+    def check_for_winner(self, **kwargs):
+        player = kwargs.get('current_player')
+        if set(self.board.board[player.pits]) == {0}:
+            board = self.board.gather_remaining(player)
+            print("Game Finished! %s: %d to %s: %d" % (self.player_one.name, board[self.player_one.store][0], self.player_two.name, board[self.player_two.store][0]))
+            return True
+        else:
+            return False
+
+    def swap_current_player(self, current_player):
+        if current_player == self.player_one:
+            return self.player_two
+        return self.player_one

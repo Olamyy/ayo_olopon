@@ -1,5 +1,5 @@
 class BaseConfig(object):
-    DEFAULT_NAME = 'Player'
+    COMPUTER_NAME = 'Iku baba yeye'
     INTRO_WAIT_TIME = 3
     GAME_TYPE_MAP = {"hvh": "Human vs Human", "hvc": "Computer vs Human", "cvc": "Computer vs Computer"}
 
