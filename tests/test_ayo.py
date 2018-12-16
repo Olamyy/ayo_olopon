@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 # -*- coding: utf-8 -*-
 
 """Tests for `ayo` package."""
@@ -7,7 +8,6 @@ import pytest
 
 from click.testing import CliRunner
 
-from ayo import game
 from ayo import cli
 
 
