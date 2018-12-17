@@ -72,7 +72,7 @@ class Game(object):
         player = kwargs.get('current_player')
         if set(self.board.board[player.pits]) == {0}:
             board = self.board.gather_remaining(player)
-            print("Game Finished! %s: %d to %s: %d" % (self.player_one.name, board[self.player_one.store][0], self.player_two.name, board[self.player_two.store][0]))
+            print("Game Finished! \n  %s: %d | %s: %d" % (self.player_one.name, board[self.player_one.store][0], self.player_two.name, board[self.player_two.store][0]))
             return True
         else:
             return False

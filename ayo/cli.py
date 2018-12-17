@@ -61,7 +61,7 @@ def setup(game, pim, pits, stones, config=None):
         player_two = VectorPlayer(name=generate_name(), pits=BoardConfig.PLAYER_TWO_PITS, store=BoardConfig.PLAYER_TWO_STORE)
         game = Game(players=[player_one, player_two], board=board)
     else:
-        player_one = VectorPlayer(name=generate_name(), pits=BoardConfig.PLAYER_ONE_PITS, store=BoardConfig.PLAYER_TWO_STORE)
+        player_one = VectorPlayer(name=generate_name(), pits=BoardConfig.PLAYER_ONE_PITS, store=BoardConfig.PLAYER_ONE_STORE)
         player_two = VectorPlayer(name=generate_name(), pits=BoardConfig.PLAYER_TWO_PITS, store=BoardConfig.PLAYER_TWO_STORE)
         game = Game(players=[player_one, player_two], board=board)
 

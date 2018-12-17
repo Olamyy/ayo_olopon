@@ -1,3 +1,7 @@
+from sys import path
+
+path.append('/Users/Olamilekan/Desktop/Machine Learning/OpenSource/ayo/ayo')
+
 from settings import BoardConfig
 from board import Board
 import random
@@ -72,7 +76,6 @@ class RandomPlayer(Computer):
 class MiniMaxPlayer(Computer):
     def play(self, **kwargs):
         pass
-
 
 class VectorPlayer(Computer):
     def play(self, **kwargs):
