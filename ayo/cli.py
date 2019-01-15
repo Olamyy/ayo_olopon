@@ -22,13 +22,13 @@ import click
 def setup(game, pim, pits, stones, config=None):
     """Entry Point"""
 
-    pbar = tqdm(range(10000))
+    pbar = tqdm(range(100))
     for char in pbar:
         pbar.set_description("INITIALIZING GAME %s" % char)
     print()
 
     if config:
-        pbar = tqdm(range(10000))
+        pbar = tqdm(range(100))
         for _ in pbar:
             pbar.set_description("GETTING CONFIGURATION FROM {0}".format(config))
         print()
