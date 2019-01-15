@@ -21,9 +21,9 @@ class Game(object):
         self.board = Board(**rules)
         self.player_one, self.player_two = players[0], players[1]
         self.starting_player = self.player_one if rules.get('start') == 1 else self.player_two
-        self.data_map = {self.player_one.id: {'moves': [], 'earned_free_move': [], 'won': [], 'invalid': []}, self.player_two.id: {'moves': [], 'earned_free_move': [], 'won': [], 'invalid': []},
-
-                         'date': datetime.datetime.now()}
+        self.data_map = {self.player_one.id: {'moves': [], 'earned_free_move': [], 'won': [], 'invalid': []},
+                         self.player_two.id: {'moves': [], 'earned_free_move': [], 'won': [], 'invalid': []},
+                         'date': str(datetime.datetime.now())}
         self.rules = rules
 
     def move(self, player):
