@@ -65,8 +65,8 @@ def setup(game, pim, pits, stones, config=None):
         player_two = VectorPlayer(name=generate_name(), pits=BoardConfig.PLAYER_TWO_PITS, store=BoardConfig.PLAYER_TWO_STORE)
         game = Game(players=[player_one, player_two], board=board)
 
-    # if click.confirm('\n\n{} vs {}. \n Start Game'.format(player_one.name.upper(), player_two.name.upper()), abort=True):
-    game.move(player_one)
+    if click.confirm('\n\n{} vs {}. \n Start Game'.format(player_one.name.upper(), player_two.name.upper()), abort=True):
+        game.move(player_one)
 
 
 if __name__ == '__main__':
