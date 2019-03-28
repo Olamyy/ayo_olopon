@@ -4,7 +4,7 @@
 
 from board import Board
 from game import Game
-from player import Human, VectorPlayer, RandomPlayer
+from player import Human, VectorPlayer, RandomPlayer, GreedyPlayer
 from settings import MessageConfig, BoardConfig
 from utils import generate_name
 from termcolor import colored
@@ -41,12 +41,12 @@ def setup(game, pim, pits, stones, config=None):
             except yaml.YAMLError as exc:
                 print("Something went wrong with reading your config file. \n {}".format(exc))
 
-    print(colored("Setting up game with the following config: \n Game Type: {0} "
-                  "\n Board Pits: {1} \n Board Stones: {2} \n Penalize Invalid Moves: {3}"
-                  .format(BoardConfig.GAME_TYPE_MAP.get(game), pits, stones, pim), "yellow"))
-    print()
-    if click.confirm('Do you want to continue with this configuration?', abort=True):
-        print(text2art("AYO \t \t \t \t OLOPON"))
+    # print(colored("Setting up game with the following config: \n Game Type: {0} "
+    #               "\n Board Pits: {1} \n Board Stones: {2} \n Penalize Invalid Moves: {3}"
+    #               .format(BoardConfig.GAME_TYPE_MAP.get(game), pits, stones, pim), "yellow"))
+    # print()
+    # if click.confirm('Do you want to continue with this configuration?', abort=True):
+    #     print(text2art("AYO \t \t \t \t OLOPON"))
 
     board = Board(pim=pim, pits=pits, stones=stones)
 
@@ -65,8 +65,8 @@ def setup(game, pim, pits, stones, config=None):
         player_two = VectorPlayer(name=generate_name(), pits=BoardConfig.PLAYER_TWO_PITS, store=BoardConfig.PLAYER_TWO_STORE)
         game = Game(players=[player_one, player_two], board=board)
 
-    if click.confirm('\n\n{} vs {}. \n Start Game'.format(player_one.name.upper(), player_two.name.upper()), abort=True):
-        game.move(player_one)
+    # if click.confirm('\n\n{} vs {}. \n Start Game'.format(player_one.name.upper(), player_two.name.upper()), abort=True):
+    game.move(player_one)
 
 
 if __name__ == '__main__':

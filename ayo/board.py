@@ -34,6 +34,11 @@ class Board(object):
 
     def move_stones(self, player, position):
         current_area = player.pits
+
+        print("Current Area", current_area)
+
+        print(self.board[current_area][position])
+
         if not self.board[current_area][position]:
             if self.rules.get("pim"):
                 player.points -= 1

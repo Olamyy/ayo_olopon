@@ -5,6 +5,7 @@ path.append('/Users/Olamilekan/Desktop/Machine Learning/OpenSource/ayo/ayo')
 from settings import BoardConfig
 from board import Board
 import random
+import math
 
 
 class Player(object):
@@ -20,7 +21,7 @@ class Player(object):
     def generate_id(self):
         import uuid
         id_ = str(uuid.uuid4()).replace('-', '')
-        return id_
+        return id_[:5]
 
 
 class Human(Player):
@@ -77,20 +78,45 @@ class MiniMaxPlayer(Computer):
     def play(self, **kwargs):
         pass
 
+
+class GreedyPlayer(Computer):
+    """
+    A simple implementation of the greedy algorithm.
+    """
+
+    def play(self, **kwargs):
+        self.think(self.name)
+        board, player, opponent = kwargs.get('board'), kwargs.get('player'), kwargs.get('opponent')
+        board_list = board.board
+        best = - math.inf
+        greedy_move = 0
+        eligible_moves = self.eligible_moves(board_list)
+        for move in eligible_moves:
+            if self.evaluate_move(move, board, player=player, opponent=opponent) >= best:
+                best = self.evaluate_move(move, board, player=player, opponent=opponent)
+                greedy_move = move
+        return greedy_move
+
+    def evaluate_move(self, move, board, **kwargs):
+        current_player, opponent = kwargs.get('player'), kwargs.get('opponent')
+        board.move_stones(current_player, move)
+        return current_player.store - opponent.store
+
+
 class VectorPlayer(Computer):
     def play(self, **kwargs):
         board = kwargs.get('board').board
         """ Use an reverse indices vector to optimize for free turns. """
         self.think(self.name)
 
-        reverse_indices = list(reversed(range(0, 6)))
-        reverse_indices.reverse()
+        all_moves = list(reversed(range(0, 6)))
+        all_moves.reverse()
 
-        for i in reverse_indices:
+        for i in all_moves:
             if self.eligible_free_turns(board)[i] == 1:
                 if self.get_pits(board)[i] == Board.reverse_index(i) + 1:
                     return i
-        for i in reverse_indices:
+        for i in all_moves:
             if self.get_pits(board)[i] > Board.reverse_index(i) + 1:
                 return i
         return random.choice(self.eligible_moves(board))
