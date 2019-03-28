@@ -41,12 +41,12 @@ def setup(game, pim, pits, stones, config=None):
             except yaml.YAMLError as exc:
                 print("Something went wrong with reading your config file. \n {}".format(exc))
 
-    # print(colored("Setting up game with the following config: \n Game Type: {0} "
-    #               "\n Board Pits: {1} \n Board Stones: {2} \n Penalize Invalid Moves: {3}"
-    #               .format(BoardConfig.GAME_TYPE_MAP.get(game), pits, stones, pim), "yellow"))
-    # print()
-    # if click.confirm('Do you want to continue with this configuration?', abort=True):
-    #     print(text2art("AYO \t \t \t \t OLOPON"))
+    print(colored("Setting up game with the following config: \n Game Type: {0} "
+                  "\n Board Pits: {1} \n Board Stones: {2} \n Penalize Invalid Moves: {3}"
+                  .format(BoardConfig.GAME_TYPE_MAP.get(game), pits, stones, pim), "yellow"))
+    print()
+    if click.confirm('Do you want to continue with this configuration?', abort=True):
+        print(text2art("AYO \t \t \t \t OLOPON"))
 
     board = Board(pim=pim, pits=pits, stones=stones)
 

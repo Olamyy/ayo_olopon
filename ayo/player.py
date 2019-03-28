@@ -1,7 +1,3 @@
-from sys import path
-
-path.append('/Users/Olamilekan/Desktop/Machine Learning/OpenSource/ayo/ayo')
-
 from settings import BoardConfig
 from board import Board
 import random
