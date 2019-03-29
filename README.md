@@ -1,19 +1,5 @@
 ---
 
-## Table of Contents (Optional)
-
-> If you're `README` has a lot of info, section headers might be nice.
-
-- [Installation](#installation)
-- [Features](#features)
-- [Contributing](#contributing)
-- [Team](#team)
-- [FAQ](#faq)
-- [Support](#support)
-- [License](#license)
-
----
-
 ## Installation
 
 - Clone this repo to your local machine using `https://github.com/Olamyy/ayo_olopon/`
@@ -63,9 +49,11 @@ This can be done in two ways.
     
     2. Manually call pass the required config variables as a single command while launching the game. 
     
-    python ayo/cli.py --game=hvc --pim=1 --pits=5 --stones=10
+```bash
+   python ayo/cli.py --game=hvc --pim=1 --pits=5 --stones=10
+   ```
 
-Note: The only really required set up variable is the game type, i.e --game flag
+Note: The only really required setup variable is the game type, i.e --game flag
 
 2. Validates the configuration and sets up storage for the game.
 
