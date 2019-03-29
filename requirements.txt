@@ -1,0 +1,7 @@
+termcolor
+tqdm
+text2art
+click
+names
+pytest==3.8.2
+pytest-runner==4.2
