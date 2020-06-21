@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from settings import BoardConfig
-from exceptions import InvalidBoardAreaError, InvalidMoveError
+from ayo.settings import BoardConfig
+from ayo.exceptions import InvalidBoardAreaError, InvalidMoveError
 from termcolor import colored
 import sys
 
@@ -42,7 +42,8 @@ class Board(object):
         if not self.board[current_area][position]:
             if self.rules.get("pim"):
                 player.points -= 1
-                print(colored('That move is not allowed. Penalizing {0}. Current point {1}'.format(player.name, player.points), 'red'))
+                print(colored(f'That move is not allowed. Penalizing {player.name}. Current point {player.points}',
+                              'red'))
                 print('Exiting Game')
                 sys.exit(1)
             print(colored('Invalid Move. There are no stones to pick in this pit.', 'red'))
@@ -84,7 +85,7 @@ class Board(object):
 
     def earned_free_move(self, player, last_area):
         if last_area == player.store:
-            print(colored("{} earned a free move!", "yellow").format(player.name))
+            print(colored(f"{player.name} earned a free move!", "yellow"))
             return True
         return False
 
@@ -108,7 +109,7 @@ class Board(object):
 
         opposing_area, opposing_index = self.get_opposing_area_and_index(player, area, index)
         captured_stones = self.board[opposing_area][opposing_index]
-        print('{} stones captured.'.format(captured_stones))
+        print(f'{captured_stones} stones captured.')
 
         # Clear the two pits
         self.board[area][index] = 0

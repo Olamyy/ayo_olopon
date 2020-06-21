@@ -1,5 +1,5 @@
-from settings import BoardConfig
-from board import Board
+from ayo.settings import BoardConfig
+from ayo.board import Board
 import random
 import math
 
@@ -23,7 +23,7 @@ class Player(object):
 class Human(Player):
     def play(self, **kwargs):
         """ Get a human player's next move """
-        value = input("Please input your next move (1 to {}): ".format(BoardConfig.MAX_PITS))
+        value = input(f"Please input your next move (1 to {BoardConfig.MAX_PITS}): ")
         return int(value) - 1
 
 
@@ -59,7 +59,7 @@ class Computer(Player):
         """ Slight delay for thinking. """
         import time
         from termcolor import colored
-        print(colored('{} is thinking...', 'green').format(player))
+        print(colored(f'{player} is thinking...', 'green'))
         time.sleep(3)
 
 

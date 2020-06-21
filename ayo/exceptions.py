@@ -7,3 +7,6 @@ class InvalidMoveError(Exception):
     """ Exception flagged when no stones are available at given index. """
     pass
 
+
+class InvalidConfigError(Exception):
+    pass

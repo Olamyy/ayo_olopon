@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from board import Board
-from player import Human
-from utils import save_to_file_json
+from ayo.board import Board
+from ayo.player import Human
+from ayo.utils import save_to_file_json
 import datetime
 from termcolor import colored
 

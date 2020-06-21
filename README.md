@@ -1,7 +1,6 @@
 ---
 
 ## Installation
-
 - Clone this repo to your local machine using `https://github.com/Olamyy/ayo_olopon/`
 
 ### Setup
@@ -14,7 +13,6 @@
 ```
 pip install -r requirements.txt
 ```
-
 ---
 
 ## Playing 
@@ -29,31 +27,30 @@ STONES: Number of stones in a pit || ``int``
 
 GAME TYPE : 
 
-             hvh : Human vs Human
-             hvc : Human vs Computer
-             cvc : Computer vs Computer
+   a. hvh : Human vs Human
+   
+   b. hvc : Human vs Computer
+   
+   c. cvc : Computer vs Computer
 
 
-The entry point of the game is the `ayo/cli.py` file.
-It initialises the game by:
+The entry point of the game is the `ayo/cli.py` file. It initialises the game by:
 1. Setting up configuration. 
 
-This can be done in two ways. 
-
-    1. You can either pass your config as a yaml file with the structure below.
+   This can be done in two ways. 
+    
+      1. You can either pass your config as a yaml file with the structure below.
+           
+            pim :     [true|false]
+            pits :    [pit_number]
+            stones :  [stone_value]
+            game:     [hvh | hvc | cvc]
+        
+      2. Manually call pass the required config variables as a single command while launching the game. 
        
-        pim :     [true|false]
-        pits :    [pit_number]
-        stones :  [stone_value]
-        game:     [hvh | hvc | cvc]
-    
-    2. Manually call pass the required config variables as a single command while launching the game. 
-    
-```bash
-   python ayo/cli.py --game=hvc --pim=1 --pits=5 --stones=10
-   ```
-
-Note: The only really required setup variable is the game type, i.e --game flag
+       ```bash
+            python ayo/cli.py --game=hvc --pim=1 --pits=5 --stones=10
+       ```
 
 2. Validates the configuration and sets up storage for the game.
 

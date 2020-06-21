@@ -5,7 +5,7 @@
 
 from setuptools import setup, find_packages
 
-with open('README.rst') as readme_file:
+with open('README.md') as readme_file:
     readme = readme_file.read()
 
 with open('HISTORY.rst') as history_file:
@@ -36,7 +36,7 @@ setup(
     description="A simple rendition of the ayo game in python.",
     entry_points={
         'console_scripts': [
-            'ayo=ayo.cli:main',
+            'ayo=ayo.cli:setup',
         ],
     },
     install_requires=requirements,
